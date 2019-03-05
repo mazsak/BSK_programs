@@ -1,7 +1,5 @@
 package bskgrupa;
 
-import bskgrupa.CaesarCipher;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -28,7 +26,7 @@ public class Main {
 
         String replyMCEncryptB = mc.encryptB(wordToMCBC, keyMCBC);
         System.out.println(replyMCEncryptB);
-        String replyMCDecipherB = null;
+        String replyMCDecipherB = mc.decipherB(replyMCEncryptB, keyMCBC);
         System.out.println(replyMCDecipherB);
 
         String replyMCEncryptC = mc.encryptC(wordToMCBC, keyMCBC);

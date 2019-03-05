@@ -42,7 +42,34 @@ public class MatrixChanges {
         return resultOfEncryption(matrix, orderOfLevel);
     }
 
-    public String encryptC(String word, String key){
+    public String decipherB(String word, String key) {
+        StringBuilder reply = new StringBuilder();
+        List<String> matrix, sortMatrix = new ArrayList<>();
+        List<Integer> orderOfLevel;
+
+        orderOfLevel = preparationOfOrder(word, key);
+
+        int moduleLetter = word.length() % orderOfLevel.size();
+
+        matrix = divideStringDecipher(word, (word.length() - moduleLetter) / orderOfLevel.size(), moduleLetter);
+
+
+        for (int index : orderOfLevel) {
+            sortMatrix.add(matrix.get(index));
+        }
+
+        for (int i = 0; i < matrix.get(0).length(); i++) {
+            for (String letterWithWord : sortMatrix) {
+                if (letterWithWord.length() != i) {
+                    reply.append(letterWithWord.charAt(i));
+                }
+            }
+        }
+
+        return reply.toString();
+    }
+
+    public String encryptC(String word, String key) {
         List<String> matrix;
         List<Integer> orderOfLevel;
 
@@ -64,6 +91,23 @@ public class MatrixChanges {
         return list;
     }
 
+    List<String> divideStringDecipher(String word, int size, int moduleLetter) {
+        List<String> list = new ArrayList<>();
+
+        int i = 0;
+        while (i < word.length()) {
+            int sizeNow = size;
+            if (moduleLetter != 0) {
+                sizeNow++;
+                moduleLetter--;
+            }
+            list.add(word.substring(i, Math.min(word.length(), i + sizeNow)));
+            i += sizeNow;
+        }
+
+        return list;
+    }
+
     List<String> divideStringTermsOfLength(String word, List<Integer> orderOfLevel) {
         List<String> list = new ArrayList<>();
         int indexStart = 0;
@@ -76,7 +120,7 @@ public class MatrixChanges {
         return list;
     }
 
-    List<Integer> preparationOfOrder(String word, String key){
+    List<Integer> preparationOfOrder(String word, String key) {
         List<String> helpKey = divideString(key, 1);
         List<Integer> orderOfLevel = new ArrayList<>();
         Map<Integer, String> mapKey = new HashMap<>();
@@ -98,7 +142,7 @@ public class MatrixChanges {
         return orderOfLevel;
     }
 
-    String resultOfEncryption(List<String> matrix, List<Integer> orderOfLevel){
+    String resultOfEncryption(List<String> matrix, List<Integer> orderOfLevel) {
         StringBuilder reply = new StringBuilder();
 
         for (int i = 0; i < orderOfLevel.size(); i++) {
