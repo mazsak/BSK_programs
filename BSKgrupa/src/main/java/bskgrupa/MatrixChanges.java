@@ -7,14 +7,9 @@ public class MatrixChanges {
 
     public String encryptA(String word, String key) {
         StringBuilder reply = new StringBuilder();
-        List<Integer> orderOfLevel = Arrays.stream(key.split("-")).map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> orderOfLevel = preparationOrderOfLevel(key);
+        int maxLevel = orderOfLevel.size();
         List<String> matrix;
-        int maxLevel = 0;
-        try {
-            maxLevel = orderOfLevel.stream().mapToInt(x -> x).max().orElseThrow(NoSuchFieldException::new);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
 
         matrix = divideString(word, maxLevel);
 
@@ -29,49 +24,32 @@ public class MatrixChanges {
         return reply.toString();
     }
 
-    public String decipherA(String word) {
-        String key = "3-5-1-2-4";
-        String originalKey = "3-4-1-5-2";
+    public String decipherA(String word, String key) {
         StringBuilder reply = new StringBuilder();
         String reverseKey = new StringBuilder(key).reverse().toString();
-        List<Integer> orderOfLevel = Arrays.stream(key.split("-")).map(Integer::parseInt).collect(Collectors.toList());
-        List<Integer> originalOrderOfLevel = Arrays.stream(originalKey.split("-")).map(Integer::parseInt).collect(Collectors.toList());
-        List<Integer> reverseOrderOfLevel = Arrays.stream(reverseKey.split("-")).map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> orderOfLevel = preparationOrderOfLevel(key);
+        int maxLevel = orderOfLevel.size();
         List<String> matrix;
-        int maxLevel = 0;
-        try {
-            maxLevel = orderOfLevel.stream().mapToInt(x -> x).max().orElseThrow(NoSuchFieldException::new);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+        char[] tab = new char[word.length()];
 
-        matrix = divideString(word, maxLevel);
+        matrix = divideString(word, 1);
 
-        for (String part : matrix) {
-            if (part.length() == 4) {
-                for (int i = 0; i < maxLevel; i++) {
-                    if (part.length() >= originalOrderOfLevel.get(i)) {
-                        reply.append(part.charAt(originalOrderOfLevel.get(i) - 1));
-                    }
-                }
-            } else if (part.length() < 4) {
-                part = new StringBuilder(part).reverse().toString();
-                for (int i = 0; i < maxLevel; i++) {
-                    if (part.length() >= reverseOrderOfLevel.get(i)) {
-                        reply.append(part.charAt(reverseOrderOfLevel.get(i) - 1));
-                    }
-                }
-            } else {
-                for (int i = 0; i < maxLevel; i++) {
-                    if (part.length() >= orderOfLevel.get(i)) {
-                        reply.append(part.charAt(orderOfLevel.get(i) - 1));
-                    }
+        int i = 0, z = 0;
+        while (i < matrix.size()) {
+            for (int index : orderOfLevel) {
+                if (word.length() > index + z - 1) {
+                    tab[index + z - 1] = matrix.get(i).charAt(0);
+                    i++;
                 }
             }
-
+            z += maxLevel;
         }
 
         return reply.toString();
+    }
+
+    public List<Integer> preparationOrderOfLevel(String key) {
+        return Arrays.stream(key.split("-")).map(Integer::parseInt).collect(Collectors.toList());
     }
 
     public String encryptB(String word, String key) {
@@ -153,7 +131,6 @@ public class MatrixChanges {
             g++;
         }
         z = 0;
-        System.out.println(key.length() * a);
         g = 0;
         int d = 1;
         for (int k = 0; k < key.length() * a && z < word.length(); k++) {

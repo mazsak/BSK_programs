@@ -54,7 +54,7 @@ public class GUIController implements Initializable {
                 case 1:
                     MatrixChanges mcA = new MatrixChanges();
                     if (chosenEcryption.isSelected()) {
-                        resultText.setText(mcA.decipherA(wordText.getText()));
+                        resultText.setText(mcA.decipherA(wordText.getText(), keyText.getText()));
                     } else {
                         resultText.setText(mcA.encryptA(wordText.getText(), keyText.getText()));
                     }
@@ -71,7 +71,7 @@ public class GUIController implements Initializable {
 
                     MatrixChanges mcC = new MatrixChanges();
                     if (chosenEcryption.isSelected()) {
-                        resultText.setText(null);
+                        resultText.setText(mcC.decryptC(wordText.getText(), keyText.getText()));
                     } else {
                         resultText.setText(mcC.encryptC(wordText.getText(), keyText.getText()));
                     }
@@ -90,7 +90,7 @@ public class GUIController implements Initializable {
                     if (chosenEcryption.isSelected()) {
                         resultText.setText(null);
                     } else {
-                        //resultText.setText(ccB.encryptB(wordText.getText(), keyText.getText()));
+                        resultText.setText(ccB.encryptB(wordText.getText(), Integer.parseInt(keyText.getText()), Integer.parseInt(key2Text.getText())));
                     }
                     break;
             }
