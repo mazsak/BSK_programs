@@ -234,7 +234,7 @@ public class MatrixChanges {
         for (int a = 0; a < z; a++) {
             for (int i = 0; i < orderOfLevel.size(); i++) {
                 for (int j = 0 + (a * orderOfLevel.size()); j < matrix.size(); j++) {
-                    if (matrix.lastIndexOf(matrix.get(j)) < orderOfLevel.size() * (a + 1))
+                    if (j < orderOfLevel.size() * (a + 1))
                         if (matrix.get(j).length() > orderOfLevel.lastIndexOf(i)) {
                             reply.append(matrix.get(j).charAt(orderOfLevel.lastIndexOf(i)));
                         }
