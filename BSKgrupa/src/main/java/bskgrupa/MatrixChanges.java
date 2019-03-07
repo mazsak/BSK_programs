@@ -76,7 +76,6 @@ public class MatrixChanges {
         word = word.replaceAll("\\s", "");
         orderOfLevel = preparationOfOrder(word, key);
         matrix = divideStringTermsOfLength(word, orderOfLevel);
-
         return resultOfEncryption(matrix, orderOfLevel);
     }
 
@@ -149,11 +148,12 @@ public class MatrixChanges {
         List<String> list = new ArrayList<>();
         int indexStart = 0;
         for (int i = 0; indexStart < word.length(); i++) {
+            if (i >= orderOfLevel.size())
+                i = 0;
             int size = orderOfLevel.lastIndexOf(i);
             list.add(word.substring(indexStart, Math.min(word.length(), indexStart + size + 1)));
             indexStart += size + 1;
         }
-
         return list;
     }
 
@@ -179,13 +179,20 @@ public class MatrixChanges {
         return orderOfLevel;
     }
 
+
     String resultOfEncryption(List<String> matrix, List<Integer> orderOfLevel) {
         StringBuilder reply = new StringBuilder();
+        int z = matrix.size() / orderOfLevel.size();
+        if (matrix.size() % orderOfLevel.size() != 0)
+            z++;
 
-        for (int i = 0; i < orderOfLevel.size(); i++) {
-            for (String part : matrix) {
-                if (part.length() > orderOfLevel.lastIndexOf(i)) {
-                    reply.append(part.charAt(orderOfLevel.lastIndexOf(i)));
+        for (int a = 0; a < z; a++) {
+            for (int i = 0; i < orderOfLevel.size(); i++) {
+                for (int j = 0 + (a * orderOfLevel.size()); j < matrix.size(); j++) {
+                    if (matrix.lastIndexOf(matrix.get(j)) < orderOfLevel.size() * (a + 1))
+                        if (matrix.get(j).length() > orderOfLevel.lastIndexOf(i)) {
+                            reply.append(matrix.get(j).charAt(orderOfLevel.lastIndexOf(i)));
+                        }
                 }
             }
         }
