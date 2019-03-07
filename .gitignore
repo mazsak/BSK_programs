@@ -27,8 +27,3 @@ tmp/
 
 # Brunch output folder.
 public/
-
-#Intellij
-.idea/
-out/
-*.iml
