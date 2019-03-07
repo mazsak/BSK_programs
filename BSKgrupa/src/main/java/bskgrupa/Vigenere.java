@@ -5,6 +5,7 @@ public class Vigenere {
     public String encrypt(String word, String key) {
         StringBuilder reply = new StringBuilder();
 
+        word = word.replaceAll("\\s", "");
         word = word.toUpperCase();
         key = preparationKey(key, word.length());
 
