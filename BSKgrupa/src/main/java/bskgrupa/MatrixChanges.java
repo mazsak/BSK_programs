@@ -47,6 +47,8 @@ public class MatrixChanges {
             z += maxLevel;
         }
 
+        reply.append(tab);
+
         return reply.toString();
     }
 
