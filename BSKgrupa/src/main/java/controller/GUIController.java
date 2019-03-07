@@ -3,6 +3,7 @@ package controller;
 import bskgrupa.CaesarCipher;
 import bskgrupa.MatrixChanges;
 import bskgrupa.RailFence;
+import bskgrupa.Vigenere;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -93,6 +94,14 @@ public class GUIController implements Initializable {
                         resultText.setText(ccB.encryptB(wordText.getText(), Integer.parseInt(keyText.getText()), Integer.parseInt(key2Text.getText())));
                     }
                     break;
+                case 6:
+                    Vigenere v = new Vigenere();
+                    if (chosenEcryption.isSelected()) {
+                        resultText.setText(v.decipher(wordText.getText(), keyText.getText()));
+                    } else {
+                        resultText.setText(v.encrypt(wordText.getText(), keyText.getText()));
+                    }
+                    break;
             }
         }
     }
@@ -116,6 +125,7 @@ public class GUIController implements Initializable {
         listCoding.add("Matrix Changes C");
         listCoding.add("Caesar Cipher A");
         listCoding.add("Caesar Cipher B");
+        listCoding.add("Vigenere");
 
         chosenCiphers.setItems(listCoding);
     }
