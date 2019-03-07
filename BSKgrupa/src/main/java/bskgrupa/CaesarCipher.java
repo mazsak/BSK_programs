@@ -1,9 +1,7 @@
 package bskgrupa;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CaesarCipher {
 
@@ -56,10 +54,9 @@ public class CaesarCipher {
 
         for (char letter : tab) {
             if (letter >= 65 && letter <= 90) {
-                System.out.println( ((((letter - 65) * keyA + keyB) % 26) + 65));
-                reply.append((char) ((((letter - 65) * keyA + keyB) % 26) + 65));
+                reply.append((char) ((((letter - 65) * keyB + keyA) % 26) + 65));
             }else {
-                reply.append((char) ((((letter - 97) * keyA + keyB) % 26) + 97));
+                reply.append((char) ((((letter - 97) * keyB + keyA) % 26) + 97));
             }
         }
 
@@ -80,7 +77,7 @@ public class CaesarCipher {
             if (letter >= 65 && letter <= 90) {
                 reply.append((char) (((((letter - 65) + (26 - keyA)) * Math.pow(keyB, 11)) % 26) + 65));
             }else{
-                reply.append((char) (((((letter - 97) + (26 - keyA)) * Math.pow(keyB, 20)) % 26) + 97));
+                reply.append((char) (((((letter - 97) + (26 - keyA)) * Math.pow(keyB, 11)) % 26) + 97));
             }
         }
 

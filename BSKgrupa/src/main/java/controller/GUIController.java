@@ -89,7 +89,7 @@ public class GUIController implements Initializable {
                 case 5:
                     CaesarCipher ccB = new CaesarCipher();
                     if (chosenEcryption.isSelected()) {
-                        resultText.setText(null);
+                        resultText.setText(ccB.decryptB(wordText.getText(), Integer.parseInt(keyText.getText()), Integer.parseInt(key2Text.getText())));
                     } else {
                         resultText.setText(ccB.encryptB(wordText.getText(), Integer.parseInt(keyText.getText()), Integer.parseInt(key2Text.getText())));
                     }
