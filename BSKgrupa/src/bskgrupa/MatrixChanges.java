@@ -75,10 +75,47 @@ public class MatrixChanges {
 
         word = word.replaceAll("\\s", "");
         orderOfLevel = preparationOfOrder(word, key);
-
         matrix = divideStringTermsOfLength(word, orderOfLevel);
 
         return resultOfEncryption(matrix, orderOfLevel);
+    }
+
+    public int findIndex(List<Integer> list, int num) {
+        for (int i = 0; i < list.size(); i++)
+            if (list.get(i) == num)
+                return i;
+        return 0;
+    }
+
+    public String decryptC(String word, String key) {
+        StringBuilder reply = new StringBuilder();
+        List<Integer> orderOfLevel;
+
+
+        orderOfLevel = preparationOfOrder(word, key);
+        int z = 0;
+        char tab[][] = new char[key.length()][key.length()];
+        for (int k = 0; k < key.length(); k++) {
+            for (int j = 0; j <= findIndex(orderOfLevel, k) && z < word.length(); j++) {
+                tab[k][j] = '*';
+                z++;
+            }
+        }
+        z = 0;
+        for (int k = 0; k < key.length() && z < word.length(); k++) {
+            for (int j = 0; j < key.length(); j++) {
+                if (tab[j][findIndex(orderOfLevel, k)] == '*') {
+                    tab[j][findIndex(orderOfLevel, k)] = word.charAt(z);
+                    z++;
+                }
+            }
+        }
+        for (int j = 0; j < key.length(); j++)
+            for (int k = 0; k < key.length(); k++) reply.append(tab[j][k]);
+
+
+        return reply.toString();
+
     }
 
     List<String> divideString(String word, int size) {
