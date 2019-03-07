@@ -71,25 +71,31 @@ public class MatrixChanges {
 
     public String decipherB(String word, String key) {
         StringBuilder reply = new StringBuilder();
-        List<String> matrix, sortMatrix = new ArrayList<>();
         List<Integer> orderOfLevel;
 
         orderOfLevel = preparationOfOrder(word, key);
+        String[] matrix = new String[orderOfLevel.size()];
 
         int moduleLetter = word.length() % orderOfLevel.size();
+        int sizeWord = (word.length() - moduleLetter) / orderOfLevel.size();
 
-        matrix = divideStringDecipher(word, (word.length() - moduleLetter) / orderOfLevel.size(), moduleLetter);
+        //matrix = divideStringDecipher(word, (word.length() - moduleLetter) / orderOfLevel.size(), moduleLetter);
 
-
-        for (int index : orderOfLevel) {
-            sortMatrix.add(matrix.get(index));
+        int startIndex = 0;
+        for (int i = 0; i < orderOfLevel.size(); i++) {
+            if (orderOfLevel.indexOf(i) < moduleLetter) {
+                matrix[orderOfLevel.indexOf(i)] = word.substring(startIndex, startIndex + sizeWord + 1);
+                startIndex += 2;
+            } else {
+                matrix[orderOfLevel.indexOf(i)] = word.substring(startIndex, startIndex + sizeWord);
+                startIndex++;
+            }
         }
 
-        for (int i = 0; i < matrix.get(0).length(); i++) {
-            for (String letterWithWord : sortMatrix) {
-                if (letterWithWord.length() != i) {
-                    reply.append(letterWithWord.charAt(i));
-                }
+        for (int i = 0; i < matrix[0].length(); i++) {
+            for (String wordHelp : matrix) {
+                if (wordHelp.length() > i)
+                    reply.append(wordHelp.charAt(i));
             }
         }
 
