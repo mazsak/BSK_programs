@@ -138,23 +138,38 @@ public class MatrixChanges {
 
         orderOfLevel = preparationOfOrder(word, key);
         int z = 0;
-        char tab[][] = new char[key.length()][key.length()];
-        for (int k = 0; k < key.length(); k++) {
-            for (int j = 0; j <= findIndex(orderOfLevel, k) && z < word.length(); j++) {
+        int a = word.length() / key.length();
+        if (word.length() % key.length() != 0)
+            a++;
+        if (a == 0) a = 1;
+        int g = 0;
+        char tab[][] = new char[key.length() * a][key.length() * a];
+        for (int k = 0; k < key.length() * a; k++) {
+            if (k != 0 && k != 1) if (key.length() % k == 0) g = 0;
+            for (int j = 0; j <= findIndex(orderOfLevel, g) && z < word.length(); j++) {
                 tab[k][j] = '*';
                 z++;
             }
+            g++;
         }
         z = 0;
-        for (int k = 0; k < key.length() && z < word.length(); k++) {
-            for (int j = 0; j < key.length(); j++) {
-                if (tab[j][findIndex(orderOfLevel, k)] == '*') {
-                    tab[j][findIndex(orderOfLevel, k)] = word.charAt(z);
+        System.out.println(key.length() * a);
+        g = 0;
+        int d = 1;
+        for (int k = 0; k < key.length() * a && z < word.length(); k++) {
+            if (k != 0 && k != 1) if (key.length() % k == 0) {
+                g = 0;
+                d++;
+            }
+            for (int j = 0; j < key.length() * d; j++) {
+                if (tab[j][findIndex(orderOfLevel, g)] == '*') {
+                    tab[j][findIndex(orderOfLevel, g)] = word.charAt(z);
                     z++;
                 }
             }
+            g++;
         }
-        for (int j = 0; j < key.length(); j++)
+        for (int j = 0; j < key.length() * a; j++)
             for (int k = 0; k < key.length(); k++) reply.append(tab[j][k]);
 
 
