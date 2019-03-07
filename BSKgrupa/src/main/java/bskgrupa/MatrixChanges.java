@@ -11,6 +11,8 @@ public class MatrixChanges {
         int maxLevel = orderOfLevel.size();
         List<String> matrix;
 
+        word = word.replaceAll("\\s", "");
+
         matrix = divideString(word, maxLevel);
 
         for (String part : matrix) {

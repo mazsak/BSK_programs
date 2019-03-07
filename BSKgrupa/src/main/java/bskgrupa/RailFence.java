@@ -4,6 +4,7 @@ public class RailFence {
 
     public String encrypt(String word, int level) {
         StringBuilder reply = new StringBuilder();
+        word = word.replaceAll("\\s", "");
         char[][] tab = new char[level][word.length()];
         int currentLevel = 0, numberLetter = 0;
         boolean changeOfDirection = false;
@@ -40,7 +41,6 @@ public class RailFence {
 
     public String decipher(String word, int level) {
         StringBuilder reply = new StringBuilder();
-        ;
         char[][] tab = new char[level][word.length()];
         boolean changeOfDirection = false;
         int j = 0;
