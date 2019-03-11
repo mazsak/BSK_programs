@@ -109,12 +109,6 @@ public class MatrixChanges {
         return resultOfEncryption(matrix, orderOfLevel);
     }
 
-    public int findIndex(List<Integer> list, int num) {
-        for (int i = 0; i < list.size(); i++)
-            if (list.get(i) == num)
-                return i;
-        return 0;
-    }
 
     public String decryptC(String word, String key) {
         StringBuilder reply = new StringBuilder();
@@ -133,7 +127,16 @@ public class MatrixChanges {
                 level++;
             sizeWord -= (orderOfLevel.indexOf(i) + 1);
         }
-        char[][] tab = new char[orderOfLevel.size()][level];
+        int tmp = 0;
+        int maxLevel = 0;
+        while (sizeWord > 0) {
+            maxLevel++;
+            if (tmp >= orderOfLevel.size())
+                tmp = 0;
+            sizeWord -= (mapSizeRow.get(tmp) + 1);
+            tmp++;
+        }
+        char[][] tab = new char[orderOfLevel.size()][maxLevel];
         sizeWord = word.length();
 
         int index = 0;
@@ -221,7 +224,6 @@ public class MatrixChanges {
         }
         return orderOfLevel;
     }
-
 
     String resultOfEncryption(List<String> matrix, List<Integer> orderOfLevel) {
         StringBuilder reply = new StringBuilder();
