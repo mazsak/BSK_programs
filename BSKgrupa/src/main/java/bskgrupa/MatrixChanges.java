@@ -140,7 +140,7 @@ public class MatrixChanges {
         while (sizeWord > 0) {
             for (int i = 0; i < orderOfLevel.size(); i++) {
                 for (int z = 0; z < level; z++) {
-                    if (mapSizeRow.get(z) >= orderOfLevel.get(i)) {
+                    if (mapSizeRow.get(z) >= orderOfLevel.indexOf(i)) {
                         tab[i][z] = word.charAt(index);
                         index++;
                     }
@@ -149,6 +149,12 @@ public class MatrixChanges {
             sizeWord -= loopS;
         }
 
+        for (int i = 0; i < level; i++) {
+            for (int z = 0; z < orderOfLevel.size(); z++) {
+                if (tab[orderOfLevel.get(z)][i] != 0)
+                    reply.append(tab[orderOfLevel.get(z)][i]);
+            }
+        }
 
         return reply.toString();
 
