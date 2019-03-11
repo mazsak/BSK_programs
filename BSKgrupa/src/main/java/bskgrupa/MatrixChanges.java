@@ -28,7 +28,6 @@ public class MatrixChanges {
 
     public String decipherA(String word, String key) {
         StringBuilder reply = new StringBuilder();
-        String reverseKey = new StringBuilder(key).reverse().toString();
         List<Integer> orderOfLevel = preparationOrderOfLevel(key);
         int maxLevel = orderOfLevel.size();
         List<String> matrix;
@@ -79,8 +78,6 @@ public class MatrixChanges {
         int moduleLetter = word.length() % orderOfLevel.size();
         int sizeWord = (word.length() - moduleLetter) / orderOfLevel.size();
 
-        //matrix = divideStringDecipher(word, (word.length() - moduleLetter) / orderOfLevel.size(), moduleLetter);
-
         int startIndex = 0;
         for (int i = 0; i < orderOfLevel.size(); i++) {
             if (orderOfLevel.indexOf(i) < moduleLetter) {
@@ -122,42 +119,35 @@ public class MatrixChanges {
     public String decryptC(String word, String key) {
         StringBuilder reply = new StringBuilder();
         List<Integer> orderOfLevel;
-
+        Map<Integer, Integer> mapSizeRow = new HashMap<>();
+        word = word.replaceAll("\\s", "");
 
         orderOfLevel = preparationOfOrder(word, key);
-        int z = 0;
-        int a = word.length() / key.length();
-        if (word.length() % key.length() != 0)
-            a++;
-        if (a == 0) a = 1;
-        int g = 0;
-        char tab[][] = new char[key.length() * a][key.length() * a];
-        for (int k = 0; k < key.length() * a; k++) {
-            if (k != 0 && k != 1) if (key.length() % k == 0) g = 0;
-            for (int j = 0; j <= findIndex(orderOfLevel, g) && z < word.length(); j++) {
-                tab[k][j] = '*';
-                z++;
-            }
-            g++;
+        int loopS = (((1 + orderOfLevel.size()) * orderOfLevel.size()) / 2);
+        int sizeWord = word.length();
+        int level = 0;
+
+        for (int i = 0; i < orderOfLevel.size(); i++) {
+            mapSizeRow.put(i, orderOfLevel.indexOf(i));
+            if (sizeWord > 0)
+                level++;
+            sizeWord -= (orderOfLevel.indexOf(i) + 1);
         }
-        z = 0;
-        g = 0;
-        int d = 1;
-        for (int k = 0; k < key.length() * a && z < word.length(); k++) {
-            if (k != 0 && k != 1) if (key.length() % k == 0) {
-                g = 0;
-                d++;
-            }
-            for (int j = 0; j < key.length() * d; j++) {
-                if (tab[j][findIndex(orderOfLevel, g)] == '*') {
-                    tab[j][findIndex(orderOfLevel, g)] = word.charAt(z);
-                    z++;
+        char[][] tab = new char[orderOfLevel.size()][level];
+        sizeWord = word.length();
+
+        int index = 0;
+        while (sizeWord > 0) {
+            for (int i = 0; i < orderOfLevel.size(); i++) {
+                for (int z = 0; z < level; z++) {
+                    if (mapSizeRow.get(z) >= orderOfLevel.get(i)) {
+                        tab[i][z] = word.charAt(index);
+                        index++;
+                    }
                 }
             }
-            g++;
+            sizeWord -= loopS;
         }
-        for (int j = 0; j < key.length() * a; j++)
-            for (int k = 0; k < key.length(); k++) reply.append(tab[j][k]);
 
 
         return reply.toString();
