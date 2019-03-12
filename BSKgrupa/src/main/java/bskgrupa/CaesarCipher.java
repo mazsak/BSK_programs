@@ -1,5 +1,6 @@
 package bskgrupa;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,9 +55,9 @@ public class CaesarCipher {
 
         for (char letter : tab) {
             if (letter >= 65 && letter <= 90) {
-                reply.append((char) ((((letter - 65) * keyB + keyA) % 26) + 65));
+                reply.append((char)((((BigInteger.valueOf((letter - 65)).multiply(BigInteger.valueOf(keyB)).add(BigInteger.valueOf(keyA))).mod(BigInteger.valueOf(26))).add(BigInteger.valueOf(65)))).intValue());
             }else {
-                reply.append((char) ((((letter - 97) * keyB + keyA) % 26) + 97));
+                reply.append((char)((((BigInteger.valueOf((letter - 97)).multiply(BigInteger.valueOf(keyB)).add(BigInteger.valueOf(keyA))).mod(BigInteger.valueOf(26))).add(BigInteger.valueOf(97)))).intValue());
             }
         }
 
@@ -75,12 +76,11 @@ public class CaesarCipher {
 
         for (char letter : tab) {
             if (letter >= 65 && letter <= 90) {
-                reply.append((char) (((((letter - 65) + (26 - keyA)) * Math.pow(keyB, 11)) % 26) + 65));
+                reply.append((char) ((((((BigInteger.valueOf(letter).subtract(BigInteger.valueOf(65)))).add((BigInteger.valueOf(26).subtract(BigInteger.valueOf(keyA))))).multiply(BigInteger.valueOf(keyB).pow(11))).mod(BigInteger.valueOf(26))).add(BigInteger.valueOf(65))).intValue());
             }else{
-                reply.append((char) (((((letter - 97) + (26 - keyA)) * Math.pow(keyB, 11)) % 26) + 97));
+                reply.append((char) ((((((BigInteger.valueOf(letter).subtract(BigInteger.valueOf(97)))).add((BigInteger.valueOf(26).subtract(BigInteger.valueOf(keyA))))).multiply(BigInteger.valueOf(keyB).pow(11))).mod(BigInteger.valueOf(26))).add(BigInteger.valueOf(97))).intValue());
             }
         }
-
         return reply.toString();
     }
 
