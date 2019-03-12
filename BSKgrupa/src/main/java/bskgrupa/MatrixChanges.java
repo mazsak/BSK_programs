@@ -127,8 +127,11 @@ public class MatrixChanges {
                 level++;
             sizeWord -= (orderOfLevel.indexOf(i) + 1);
         }
+
+        sizeWord = word.length();
         int tmp = 0;
         int maxLevel = 0;
+
         while (sizeWord > 0) {
             maxLevel++;
             if (tmp >= orderOfLevel.size())
@@ -140,19 +143,23 @@ public class MatrixChanges {
         sizeWord = word.length();
 
         int index = 0;
+        int maxloop = 0;
         while (sizeWord > 0) {
             for (int i = 0; i < orderOfLevel.size(); i++) {
-                for (int z = 0; z < level; z++) {
-                    if (mapSizeRow.get(z) >= orderOfLevel.indexOf(i)) {
+                int checkKey = 0;
+                for (int z = maxloop; z < level + maxloop; z++) {
+                    if (mapSizeRow.get(checkKey) >= orderOfLevel.indexOf(i) && word.length() > index) {
                         tab[i][z] = word.charAt(index);
                         index++;
                     }
+                    checkKey++;
                 }
             }
             sizeWord -= loopS;
+            maxloop += level;
         }
 
-        for (int i = 0; i < level; i++) {
+        for (int i = 0; i < maxLevel; i++) {
             for (int z = 0; z < orderOfLevel.size(); z++) {
                 if (tab[orderOfLevel.get(z)][i] != 0)
                     reply.append(tab[orderOfLevel.get(z)][i]);
