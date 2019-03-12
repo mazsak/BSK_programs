@@ -65,7 +65,13 @@ public class MatrixChanges {
 
         orderOfLevel = preparationOfOrder(word, key);
 
-        return resultOfEncryption(matrix, orderOfLevel);
+        for (int i = 0; i < matrix.get(0).length(); i++) {
+            for (String letters : matrix) {
+                if (letters.length() - 1 >= orderOfLevel.get(i))
+                    reply.append(letters.charAt(orderOfLevel.get(i)));
+            }
+        }
+        return reply.toString();
     }
 
     public String decipherB(String word, String key) {
@@ -73,31 +79,35 @@ public class MatrixChanges {
         List<Integer> orderOfLevel;
 
         orderOfLevel = preparationOfOrder(word, key);
-        String[] matrix = new String[orderOfLevel.size()];
+        List<String> matrix = new ArrayList<>();
+        int sizeWord = word.length();
 
-        int moduleLetter = word.length() % orderOfLevel.size();
-        int sizeWord = (word.length() - moduleLetter) / orderOfLevel.size();
+        int size = 0;
+        while (orderOfLevel.size() > sizeWord) {
+            sizeWord -= orderOfLevel.size();
+            size++;
+        }
+
+        int start = 0;
+        int end = size;
+        for (int i = 0; i < orderOfLevel.size(); i++) {
+            if (i <= sizeWord - 1) {
+                matrix.add(word.substring(start, end + 1));
+                start += end + 1;
+                end += size + 1;
+            } else {
+                matrix.add(word.substring(start, end));
+                start += end;
+                end += size;
+            }
+        }
 
         int startIndex = 0;
-        for (int i = 0; i < orderOfLevel.size(); i++) {
-            if (orderOfLevel.indexOf(i) < moduleLetter) {
-                matrix[orderOfLevel.indexOf(i)] = word.substring(startIndex, startIndex + sizeWord + 1);
-                startIndex += 2;
-            } else {
-                matrix[orderOfLevel.indexOf(i)] = word.substring(startIndex, startIndex + sizeWord);
-                startIndex++;
-            }
-        }
 
-        for (int i = 0; i < matrix[0].length(); i++) {
-            for (String wordHelp : matrix) {
-                if (wordHelp.length() > i)
-                    reply.append(wordHelp.charAt(i));
-            }
-        }
 
         return reply.toString();
     }
+
 
     public String encryptC(String word, String key) {
         List<String> matrix;
