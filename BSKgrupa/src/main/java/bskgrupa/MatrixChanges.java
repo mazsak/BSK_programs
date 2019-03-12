@@ -142,6 +142,21 @@ public class MatrixChanges {
         char[][] tab = new char[orderOfLevel.size()][maxLevel];
         sizeWord = word.length();
 
+        int idx = 0;
+        while (sizeWord >= orderOfLevel.indexOf(idx) + 1) {
+            sizeWord -= orderOfLevel.indexOf(idx) + 1;
+            idx++;
+            if (idx >= level) {
+                idx = 0;
+            }
+        }
+
+        if (sizeWord < orderOfLevel.get(idx) + 1) {
+            idx = sizeWord - 1;
+        }
+        sizeWord = word.length();
+
+
         int index = 0;
         int maxloop = 0;
         while (sizeWord > 0) {
