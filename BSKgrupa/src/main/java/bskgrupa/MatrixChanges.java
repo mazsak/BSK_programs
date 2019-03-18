@@ -67,8 +67,11 @@ public class MatrixChanges {
 
         for (int i = 0; i < matrix.get(0).length(); i++) {
             for (String letters : matrix) {
-                if (letters.length() - 1 >= orderOfLevel.get(i))
-                    reply.append(letters.charAt(orderOfLevel.get(i)));
+                for (int j = 0; j < orderOfLevel.size(); j++) {
+                    if (i == orderOfLevel.get(j) && letters.length() - 1 >= j) {
+                        reply.append(letters.charAt(j));
+                    }
+                }
             }
         }
         return reply.toString();
@@ -77,7 +80,6 @@ public class MatrixChanges {
     public String decipherB(String word, String key) {
         StringBuilder reply = new StringBuilder();
         List<Integer> orderOfLevel = preparationOfOrder(word, key);
-        ;
         String[] matrix = new String[orderOfLevel.size()];
 
         word = word.replaceAll("\\s", "");
@@ -116,7 +118,6 @@ public class MatrixChanges {
         return reply.toString();
     }
 
-
     public String encryptC(String word, String key) {
         List<String> matrix;
         List<Integer> orderOfLevel;
@@ -126,7 +127,6 @@ public class MatrixChanges {
         matrix = divideStringTermsOfLength(word, orderOfLevel);
         return resultOfEncryption(matrix, orderOfLevel);
     }
-
 
     public String decryptC(String word, String key) {
         StringBuilder reply = new StringBuilder();
@@ -141,8 +141,9 @@ public class MatrixChanges {
 
         for (int i = 0; i < orderOfLevel.size(); i++) {
             mapSizeRow.put(i, orderOfLevel.indexOf(i));
-            if (sizeWord > 0)
+            if (sizeWord > 0) {
                 level++;
+            }
             sizeWord -= (orderOfLevel.indexOf(i) + 1);
         }
 
@@ -152,8 +153,9 @@ public class MatrixChanges {
 
         while (sizeWord > 0) {
             maxLevel++;
-            if (tmp >= orderOfLevel.size())
+            if (tmp >= orderOfLevel.size()) {
                 tmp = 0;
+            }
             sizeWord -= (mapSizeRow.get(tmp) + 1);
             tmp++;
         }
@@ -174,7 +176,6 @@ public class MatrixChanges {
         }
         sizeWord = word.length();
 
-
         int index = 0;
         int maxloop = 0;
         while (sizeWord > 0) {
@@ -194,8 +195,9 @@ public class MatrixChanges {
 
         for (int i = 0; i < maxLevel; i++) {
             for (int z = 0; z < orderOfLevel.size(); z++) {
-                if (tab[orderOfLevel.get(z)][i] != 0)
+                if (tab[orderOfLevel.get(z)][i] != 0) {
                     reply.append(tab[orderOfLevel.get(z)][i]);
+                }
             }
         }
 
@@ -234,8 +236,9 @@ public class MatrixChanges {
         List<String> list = new ArrayList<>();
         int indexStart = 0;
         for (int i = 0; indexStart < word.length(); i++) {
-            if (i >= orderOfLevel.size())
+            if (i >= orderOfLevel.size()) {
                 i = 0;
+            }
             int size = orderOfLevel.lastIndexOf(i);
             list.add(word.substring(indexStart, Math.min(word.length(), indexStart + size + 1)));
             indexStart += size + 1;
@@ -268,16 +271,18 @@ public class MatrixChanges {
     String resultOfEncryption(List<String> matrix, List<Integer> orderOfLevel) {
         StringBuilder reply = new StringBuilder();
         int z = matrix.size() / orderOfLevel.size();
-        if (matrix.size() % orderOfLevel.size() != 0)
+        if (matrix.size() % orderOfLevel.size() != 0) {
             z++;
+        }
 
         for (int a = 0; a < z; a++) {
             for (int i = 0; i < orderOfLevel.size(); i++) {
                 for (int j = 0 + (a * orderOfLevel.size()); j < matrix.size(); j++) {
-                    if (j < orderOfLevel.size() * (a + 1))
+                    if (j < orderOfLevel.size() * (a + 1)) {
                         if (matrix.get(j).length() > orderOfLevel.lastIndexOf(i)) {
                             reply.append(matrix.get(j).charAt(orderOfLevel.lastIndexOf(i)));
                         }
+                    }
                 }
             }
         }
