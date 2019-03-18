@@ -85,17 +85,18 @@ public class MatrixChanges {
         int level = word.length() / orderOfLevel.size();
         int lastLevelLetter = word.length() % orderOfLevel.size();
 
-        int start = 0, end = level;
+        int start = 0, end = level, index = 0;
         for (int idx : orderOfLevel) {
             if (idx + 1 <= lastLevelLetter) {
-                matrix[idx] = word.substring(start, end + 1);
+                matrix[orderOfLevel.indexOf(index)] = word.substring(start, end + 1);
                 start += level + 1;
                 end += level + 1;
             } else {
-                matrix[idx] = word.substring(start, end);
+                matrix[orderOfLevel.indexOf(index)] = word.substring(start, end);
                 start += level;
                 end += level;
             }
+            index++;
         }
 
         for (int i = 0; i < level; i++) {
