@@ -76,34 +76,41 @@ public class MatrixChanges {
 
     public String decipherB(String word, String key) {
         StringBuilder reply = new StringBuilder();
-        List<Integer> orderOfLevel;
+        List<Integer> orderOfLevel = preparationOfOrder(word, key);
+        ;
+        String[] matrix = new String[orderOfLevel.size()];
 
-        orderOfLevel = preparationOfOrder(word, key);
-        List<String> matrix = new ArrayList<>();
-        int sizeWord = word.length();
+        word = word.replaceAll("\\s", "");
 
-        int size = 0;
-        while (orderOfLevel.size() > sizeWord) {
-            sizeWord -= orderOfLevel.size();
-            size++;
-        }
+        int level = word.length() / orderOfLevel.size();
+        int lastLevelLetter = word.length() % orderOfLevel.size();
 
-        int start = 0;
-        int end = size;
-        for (int i = 0; i < orderOfLevel.size(); i++) {
-            if (i <= sizeWord - 1) {
-                matrix.add(word.substring(start, end + 1));
-                start += end + 1;
-                end += size + 1;
+        int start = 0, end = level;
+        for (int idx : orderOfLevel) {
+            if (idx + 1 <= lastLevelLetter) {
+                matrix[idx] = word.substring(start, end + 1);
+                start += level + 1;
+                end += level + 1;
             } else {
-                matrix.add(word.substring(start, end));
-                start += end;
-                end += size;
+                matrix[idx] = word.substring(start, end);
+                start += level;
+                end += level;
             }
         }
 
-        int startIndex = 0;
+        for (int i = 0; i < level; i++) {
+            for (int idx : orderOfLevel) {
+                reply.append(matrix[orderOfLevel.indexOf(idx)].charAt(i));
+            }
+        }
 
+        if (lastLevelLetter > 0) {
+            for (int idx : orderOfLevel) {
+                if (orderOfLevel.indexOf(idx) + 1 <= lastLevelLetter) {
+                    reply.append(matrix[orderOfLevel.indexOf(idx)].charAt(level));
+                }
+            }
+        }
 
         return reply.toString();
     }
