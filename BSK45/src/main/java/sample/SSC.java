@@ -17,8 +17,6 @@ public class SSC {
             reply.add(XOR.calculate(Lists.newArrayList(X.get(i), LSFR.get(i))));
         }
 
-//            reply = AuxiliaryMethods.systemLDFR(numberOfPower, input,  X).stream().map(e -> e.get(0)).collect(Collectors.toList()).subList(0, X.size());
-
         return reply;
     }
 

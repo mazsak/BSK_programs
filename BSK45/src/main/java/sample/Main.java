@@ -18,6 +18,7 @@ public class Main extends Application {
         cos1.encryptAndDecipher(Polynomial.read("x^3+x+1"), Lists.newArrayList(1, 0, 0), Lists.newArrayList(1, 0, 0, 0));
         cos1.encryptAndDecipher(Polynomial.read("x^3+x+1"), Lists.newArrayList(1, 0, 0), Lists.newArrayList(0, 1, 0, 1));
         CA cos2 = new CA();
+        cos2.encrypt(Polynomial.read("x^3+x+1"), Lists.newArrayList(1, 0, 0), Lists.newArrayList(1, 0, 0, 0));
         Parent root = FXMLLoader.load(getClass().getResource("/sample.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
