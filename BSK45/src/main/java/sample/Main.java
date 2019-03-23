@@ -14,6 +14,10 @@ public class Main extends Application {
 
         LFSR cos = new LFSR();
         cos.calculate(Polynomial.read("x^3+x+1"), Lists.newArrayList(1, 0, 0));
+        SSC cos1 = new SSC();
+        cos1.encryptAndDecipher(Polynomial.read("x^3+x+1"), Lists.newArrayList(1, 0, 0), Lists.newArrayList(1, 0, 0, 0));
+        cos1.encryptAndDecipher(Polynomial.read("x^3+x+1"), Lists.newArrayList(1, 0, 0), Lists.newArrayList(0, 1, 0, 1));
+        CA cos2 = new CA();
         Parent root = FXMLLoader.load(getClass().getResource("/sample.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
