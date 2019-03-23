@@ -15,15 +15,8 @@ public class CA {
                 .systemLDFR(numberOfPower, input, X)
                 .stream()
                 .map(e -> e.get(0))
-                .collect(Collectors.toList());
-        
-        while (reply.size() < X.size()) {
-            reply.addAll(reply);
-        }
-        
-        if (reply.size() > X.size()) {
-            reply = reply.subList(0, X.size());
-        }
+                .collect(Collectors.toList())
+                .subList(0, X.size());
 
         return reply;
     }
@@ -33,11 +26,15 @@ public class CA {
 
         int maxPower = numberOfPower.stream().collect(Collectors.summarizingInt(Integer::intValue)).getMax();
         SystemD system = new SystemD(maxPower, input);
-        List<Integer> output;
 
         int idx = 0;
         do {
-            reply.add(XOR.calculate(Lists.newArrayList(system.getOutputByIndex(0), system.getOutputByIndex(maxPower - 1), X.get(idx))));
+            List<Integer> xorArg = new ArrayList<>();
+            xorArg.add(X.get(idx));
+            for(int potega : numberOfPower){
+                xorArg.add(system.getOutputByIndex(potega-1));
+            }
+            reply.add(XOR.calculate(xorArg));
             system.next(X.get(idx));
             idx++;
         } while (idx != X.size());
