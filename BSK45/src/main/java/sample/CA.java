@@ -15,8 +15,15 @@ public class CA {
                 .systemLDFR(numberOfPower, input, X)
                 .stream()
                 .map(e -> e.get(0))
-                .collect(Collectors.toList())
-                .subList(0, X.size());
+                .collect(Collectors.toList());
+        
+        while (reply.size() < X.size()) {
+            reply.addAll(reply);
+        }
+        
+        if (reply.size() > X.size()) {
+            reply = reply.subList(0, X.size());
+        }
 
         return reply;
     }
