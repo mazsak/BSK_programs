@@ -12,9 +12,6 @@ public class XOR {
             }
         }
 
-        if (amountOne % 2 == 1)
-            return 1;
-        else
-            return 0;
+        return amountOne % 2;
     }
 }
