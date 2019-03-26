@@ -1,93 +1,92 @@
 package sample;
 
 import com.google.inject.internal.util.Lists;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
 
+    private static String polynomial = "x^5+x^2+x+1";
+    private static List<Integer> seed = Lists.newArrayList(0, 1, 1, 1, 0);
+
+    public enum ACTIVITY {
+        SSC,
+        CACODING,
+        CADECODING;
+    }
+
     public static void main(String[] args) throws IOException {
-        LFSR cos = new LFSR();
-        System.out.println(cos.calculate(Polynomial.read("x^4+x^2+1"), Lists.newArrayList(0, 0, 0, 1)));
 
-        cipherSSC("test3.bin", "outputSSC.bin");
-        cipherSSC("outputSSC.bin", "outputdecipherSSC.bin");
-
-        cipherCA("test3.bin", "outputCA.bin");
-        cipherCA("outputCA.bin", "outputdecipherCA.bin");
+        System.out.println("Start SSC coding......");
+        codeFile("test3", "test3_outputSSC", ACTIVITY.SSC.ordinal());
+        System.out.println("End");
+        System.out.println("Start SSC decoding......");
+        codeFile("test3_outputSSC", "test3_decodingSSC", ACTIVITY.SSC.ordinal());
+        System.out.println("End");
+        System.out.println("Start CA coding......");
+        codeFile("test3", "test3_outputCA", ACTIVITY.CACODING.ordinal());
+        System.out.println("End");
+        System.out.println("Start CA decoding......");
+        codeFile("test3_outputCA", "test3_decodingCA", ACTIVITY.CADECODING.ordinal());
+        System.out.println("End");
     }
 
-    private static void cipherCA(String file1, String file2) throws FileNotFoundException, IOException {
-        CA cos2 = new CA();
+    public static List<Integer> divideString(String word, int size) {
+        List<Integer> list = new ArrayList<>();
 
-        InputStream inputstream = new FileInputStream(file1);
-        int data = inputstream.read();
-        OutputStream output = new FileOutputStream(file2);
-        while (data != -1) {
-            String dataAsBinary = String.format("%8s", Integer.toBinaryString(data)).replace(' ', '0');
-            List input = new ArrayList();
-            List cipher;
-            if (dataAsBinary.equals("00000000")) {
-                cipher = cos2.encrypt(Polynomial.read("x^5+x^2+x+1"), Lists.newArrayList(0, 1, 1, 1, 0), Lists.newArrayList(0, 0, 0, 0, 0, 0, 0, 0));
-            } else {
-                for (int i = 0; i < 8; i++) {
-                    input.add(Character.getNumericValue(dataAsBinary.charAt(i)));
-                }
-                cipher = cos2.decipher(Polynomial.read("x^5+x^2+x+1"), Lists.newArrayList(0, 1, 1, 1, 0), input);
-            }
-            int wynik = 0;
-            if ((int) cipher.get(0) == 1) {
-                wynik = -128;
-            }
-            for (int i = 1; i < 8; i++) {
-                if((int)cipher.get(i) == 1){
-                    wynik += 128 / Math.pow(2, i);
-                }
-            }
-            output.write(wynik);
-            data = inputstream.read();
+        for (int i = 0; i < word.length(); i += size) {
+            list.add(Integer.valueOf(word.substring(i, Math.min(word.length(), i + size))));
         }
-        inputstream.close();
-        output.close();
+
+        return list;
     }
-    
-    private static void cipherSSC(String file1, String file2) throws FileNotFoundException, IOException {
-        SSC cos1 = new SSC();
 
-        InputStream inputstream = new FileInputStream(file1);
-        int data = inputstream.read();
-        OutputStream output = new FileOutputStream(file2);
-        while (data != -1) {
-            String dataAsBinary = String.format("%8s", Integer.toBinaryString(data)).replace(' ', '0');
-            List input = new ArrayList();
-            List cipher;
-            if (dataAsBinary.equals("00000000")) {
-                cipher = cos1.encryptAndDecipher(Polynomial.read("x^4+x+1"), Lists.newArrayList(1, 1, 0, 0), Lists.newArrayList(0, 0, 0, 0, 0, 0, 0, 0));
-            } else {
-                for (int i = 0; i < 8; i++) {
-                    input.add(Character.getNumericValue(dataAsBinary.charAt(i)));
-                }
-                cipher = cos1.encryptAndDecipher(Polynomial.read("x^4+x+1"), Lists.newArrayList(1, 1, 0, 0), input);
-            }
-            int wynik = 0;
-            if ((int) cipher.get(0) == 1) {
-                wynik = -128;
-            }
-            for (int i = 1; i < 8; i++) {
-                if((int)cipher.get(i) == 1){
-                    wynik += 128 / Math.pow(2, i);
-                }
-            }
-            output.write(wynik);
-            data = inputstream.read();
+    public static String joinString(List<Integer> word) {
+        StringBuilder reply = new StringBuilder();
+        for (int i : word) {
+            reply.append(i);
         }
-        inputstream.close();
-        output.close();
+        return reply.toString();
+    }
+
+
+    public static void codeFile(String nameFile, String nameFileOutput, int activity) {
+
+        try {
+            InputStream inputStream = new FileInputStream(nameFile + ".bin");
+
+            int data = inputStream.read();
+
+            OutputStream outputStream = new FileOutputStream(nameFileOutput + ".bin");
+            SSC ssc = new SSC();
+            CA ca = new CA();
+            List<Integer> word;
+
+            while (data != -1) {
+                word = divideString(Integer.toString(data, 2), 1);
+                while (word.size() < 8) {
+                    word.add(0, 0);
+                }
+
+                if (activity == ACTIVITY.SSC.ordinal())
+                    word = ssc.encryptAndDecipher(Polynomial.read(polynomial), seed, word);
+                else if (activity == ACTIVITY.CACODING.ordinal())
+                    word = ca.encrypt(Polynomial.read(polynomial), seed, word);
+                else if (activity == ACTIVITY.CADECODING.ordinal())
+                    word = ca.decipher(Polynomial.read(polynomial), seed, word);
+
+                int outputData = Integer.parseInt(joinString(word), 2);
+                outputStream.write(outputData);
+                data = inputStream.read();
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
