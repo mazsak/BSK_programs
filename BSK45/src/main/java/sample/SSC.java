@@ -7,19 +7,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SSC {
-    
-    public List<Integer> encryptAndDecipher(List<Integer> numberOfPower, List<Integer> input, List<Integer> X) {
+
+    private List<Integer> seed;
+
+    public void setSeed(List<Integer> seed) {
+        this.seed = seed;
+    }
+
+    public List<Integer> encryptAndDecipher(List<Integer> numberOfPower, List<Integer> X) {
         List<Integer> reply = new ArrayList<>();
-        
-        List<Integer> LSFR = AuxiliaryMethods.systemLDFR(numberOfPower, input, null).stream().map(e -> e.get(0)).collect(Collectors.toList());
-        while (LSFR.size() < X.size()) {
-            LSFR.addAll(LSFR);
+
+        List<List<Integer>> matrix = AuxiliaryMethods.systemLDFR(numberOfPower, seed, null);
+
+        while (matrix.size() < X.size()) {
+            matrix.addAll(matrix);
         }
-        
-        if (LSFR.size() > X.size()) {
-            LSFR = LSFR.subList(0, X.size());
+
+        if (matrix.size() > X.size()) {
+            matrix = matrix.subList(0, X.size());
         }
-        
+
+        seed = matrix.get(matrix.size() - 1);
+        List<Integer> LSFR = matrix.stream().map(e -> e.get(0)).collect(Collectors.toList());
+
         for (int i = 0; i < X.size(); i++) {
             reply.add(XOR.calculate(Lists.newArrayList(X.get(i), LSFR.get(i))));
         }

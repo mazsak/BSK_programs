@@ -1,31 +1,38 @@
 package sample;
 
-import com.google.inject.internal.util.Lists;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CA {
 
-    public List<Integer> encrypt(List<Integer> numberOfPower, List<Integer> input, List<Integer> X) {
+    private List<Integer> seed;
+
+    public void setSeed(List<Integer> seed) {
+        this.seed = seed;
+    }
+
+    public List<Integer> encrypt(List<Integer> numberOfPower, List<Integer> X) {
         List<Integer> reply;
 
-        reply = AuxiliaryMethods
-                .systemLDFR(numberOfPower, input, X)
+        List<List<Integer>> matrix = AuxiliaryMethods.systemLDFR(numberOfPower, seed, X);
+
+        reply = matrix
                 .stream()
                 .map(e -> e.get(0))
                 .collect(Collectors.toList())
                 .subList(0, X.size());
 
+        seed = matrix.get(matrix.size() - 1);
+
         return reply;
     }
 
-    public List<Integer> decipher(List<Integer> numberOfPower, List<Integer> input, List<Integer> X) {
+    public List<Integer> decipher(List<Integer> numberOfPower, List<Integer> X) {
         List<Integer> reply = new ArrayList<>();
 
         int maxPower = numberOfPower.stream().collect(Collectors.summarizingInt(Integer::intValue)).getMax();
-        SystemD system = new SystemD(maxPower, input);
+        SystemD system = new SystemD(maxPower, seed);
 
         int idx = 0;
         do {
@@ -39,7 +46,8 @@ public class CA {
             idx++;
         } while (idx != X.size());
 
+        seed = system.getOutput();
+
         return reply;
     }
-
 }
