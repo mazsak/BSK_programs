@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+         prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1"
+         xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GUIController">
+    <tabs>
+        <Tab text="Coding">
+            <content>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"
+                                    GridPane.columnIndex="3" GridPane.rowIndex="13"/>
+                        <Label text="Orders:" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets left="10.0"/>
+                            </GridPane.margin>
+                        </Label>
+                        <ChoiceBox fx:id="orders" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="2">
+                            <GridPane.margin>
+                                <Insets right="10.0"/>
+                            </GridPane.margin>
+                        </ChoiceBox>
+                        <GridPane GridPane.columnIndex="1" GridPane.rowIndex="4">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                        minWidth="-Infinity" mnemonicParsing="false"
+                                        onAction="#selectFileCodingActionListener" prefHeight="50.0" prefWidth="50.0"
+                                        text="Select" GridPane.columnIndex="1">
+                                    <GridPane.margin>
+                                        <Insets right="30.0"/>
+                                    </GridPane.margin>
+                                </Button>
+                                <Label fx:id="pathFileCoding" maxWidth="1.7976931348623157E308" text="Select file">
+                                    <font>
+                                        <Font size="13.0"/>
+                                    </font>
+                                    <GridPane.margin>
+                                        <Insets left="10.0" right="10.0"/>
+                                    </GridPane.margin>
+                                </Label>
+                            </children>
+                        </GridPane>
+                        <GridPane GridPane.columnIndex="2" GridPane.rowIndex="4">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0"
+                                                vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Label maxWidth="1.7976931348623157E308" text="Name file output:">
+                                    <font>
+                                        <Font size="13.0"/>
+                                    </font>
+                                    <GridPane.margin>
+                                        <Insets left="10.0" right="10.0"/>
+                                    </GridPane.margin>
+                                </Label>
+                                <TextField fx:id="nameFileOutput" GridPane.rowIndex="1"/>
+                            </children>
+                        </GridPane>
+                        <Label text="Type:" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                            <GridPane.margin>
+                                <Insets left="10.0"/>
+                            </GridPane.margin>
+                        </Label>
+                        <ChoiceBox fx:id="type" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="7">
+                            <GridPane.margin>
+                                <Insets right="10.0"/>
+                            </GridPane.margin>
+                        </ChoiceBox>
+                        <Button mnemonicParsing="false" onAction="#codingActionListener" text="Coding"
+                                GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="12">
+                            <GridPane.margin>
+                                <Insets right="40.0"/>
+                            </GridPane.margin>
+                        </Button>
+                        <Label maxWidth="1.7976931348623157E308" text="Polynomial (x+x^2+x^3+...):"
+                               GridPane.columnIndex="1" GridPane.rowIndex="9">
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
+                            <GridPane.margin>
+                                <Insets left="10.0"/>
+                            </GridPane.margin>
+                        </Label>
+                        <Label maxWidth="1.7976931348623157E308" text="Seed:" GridPane.columnIndex="2"
+                               GridPane.rowIndex="9">
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
+                            <GridPane.margin>
+                                <Insets left="10.0"/>
+                            </GridPane.margin>
+                        </Label>
+                        <TextField fx:id="polynomial" text="x^3+x+1" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                            <GridPane.margin>
+                                <Insets right="10.0"/>
+                            </GridPane.margin>
+                        </TextField>
+                        <TextField fx:id="seed" text="1, 0, 1" GridPane.columnIndex="2" GridPane.rowIndex="10"/>
+                    </children>
+                </GridPane>
+            </content>
+        </Tab>
+        <Tab text="Show">
+            <content>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="30.0" prefWidth="30.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"
+                                    GridPane.columnIndex="4"/>
+                        <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                        minWidth="-Infinity" mnemonicParsing="false"
+                                        onAction="#selectFileActionListener" prefHeight="50.0" prefWidth="50.0"
+                                        text="Select" GridPane.columnIndex="1"/>
+                                <Label fx:id="pathFile" maxWidth="1.7976931348623157E308" text="Select file">
+                                    <font>
+                                        <Font size="13.0"/>
+                                    </font>
+                                    <GridPane.margin>
+                                        <Insets left="10.0" right="10.0"/>
+                                    </GridPane.margin>
+                                </Label>
+                            </children>
+                        </GridPane>
+                        <GridPane GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                        minWidth="-Infinity" mnemonicParsing="false"
+                                        onAction="#selectFile1ActionListener" prefHeight="50.0" prefWidth="50.0"
+                                        text="Select" GridPane.columnIndex="1"/>
+                                <Label fx:id="pathFile1" maxWidth="1.7976931348623157E308" text="Select file">
+                                    <font>
+                                        <Font size="13.0"/>
+                                    </font>
+                                    <GridPane.margin>
+                                        <Insets left="10.0" right="10.0"/>
+                                    </GridPane.margin>
+                                </Label>
+                            </children>
+                        </GridPane>
+                        <TextArea fx:id="showFile" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                            <font>
+                                <Font size="18.0"/>
+                            </font>
+                        </TextArea>
+                        <TextArea fx:id="showFile1" prefHeight="200.0" prefWidth="200.0" wrapText="true"
+                                  GridPane.columnIndex="3" GridPane.rowIndex="3">
+                            <font>
+                                <Font size="18.0"/>
+                            </font>
+                        </TextArea>
+                    </children>
+                </GridPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>
