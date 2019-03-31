@@ -20,10 +20,11 @@ import java.util.stream.Collectors;
 public class GUIController implements Initializable {
 
     private File fileCoding;
-    private File file;
-    private File file1;
+    private File file = null;
+    private File file1 = null;
 
     private Stage stage;
+
     @FXML
     private ChoiceBox<String> orders;
 
@@ -55,12 +56,34 @@ public class GUIController implements Initializable {
     private TextArea showFile1;
 
     @FXML
+    void saveActionListener(ActionEvent event) {
+        if (file != null) {
+            Use.saveFile(file, Arrays.stream(showFile.getText().split(" ")).map(e -> Integer.parseInt(e, 16)).collect(Collectors.toList()));
+            file = null;
+            showFile.setText("");
+            pathFile.setText("Select file");
+        }
+    }
+
+    @FXML
+    void save1ActionListener(ActionEvent event) {
+        if (file1 != null) {
+            Use.saveFile(file1, Arrays.stream(showFile1.getText().split(" ")).map(e -> Integer.parseInt(e, 16)).collect(Collectors.toList()));
+            file1 = null;
+            showFile1.setText("");
+            pathFile1.setText("Select file");
+        }
+    }
+
+    @FXML
     void selectFile1ActionListener(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         file1 = fileChooser.showOpenDialog(stage);
-        pathFile1.setText(file1.getPath());
-        showFile1.setText(Use.readFile(file1));
+        if (file1 != null) {
+            pathFile1.setText(file1.getPath());
+            showFile1.setText(Use.readFile(file1));
+        }
     }
 
     @FXML
@@ -68,8 +91,10 @@ public class GUIController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         file = fileChooser.showOpenDialog(stage);
-        pathFile.setText(file.getPath());
-        showFile.setText(Use.readFile(file));
+        if (file != null) {
+            pathFile.setText(file.getPath());
+            showFile.setText(Use.readFile(file));
+        }
     }
 
     @FXML
@@ -77,7 +102,9 @@ public class GUIController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileCoding = fileChooser.showOpenDialog(stage);
-        pathFileCoding.setText(fileCoding.getPath());
+        if (fileCoding != null) {
+            pathFileCoding.setText(fileCoding.getPath());
+        }
     }
 
     @FXML

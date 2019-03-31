@@ -96,17 +96,33 @@ public class Use {
                 } else {
                     String dataString = Integer.toString(data, 16);
                     if (dataString.length() == 1) {
-                        reply.append("\b" + "0" + dataString + " ");
+                        reply.append("0" + dataString + " ");
                     } else {
-                        reply.append("\b" + dataString + " ");
+                        reply.append(dataString + " ");
                     }
                 }
                 data = inputStream.read();
             }
+            inputStream.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         return reply.toString();
+    }
+
+    public static void saveFile(File file, List<Integer> bytes) {
+
+        try {
+            OutputStream outputStream = new FileOutputStream(file.getParentFile().getPath() + "\\" + file.getName().replace(".bin", "") + "_change.bin");
+
+            for (int data : bytes) {
+                outputStream.write(data);
+            }
+
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
