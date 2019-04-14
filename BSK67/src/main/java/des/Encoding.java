@@ -133,7 +133,7 @@ public class Encoding {
     }
 
     public static void permutationIP() {
-        permutedMessageBlocks = new ArrayList();Ł
+        permutedMessageBlocks = new ArrayList();
         int ip[] = Tables.getIp();
         for (String block : messageBlocks) {
             StringBuilder sb = new StringBuilder();
