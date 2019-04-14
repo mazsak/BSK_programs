@@ -1,10 +1,9 @@
-package sample;
+package des;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class KeyGenerator {
     private static String key;
@@ -57,7 +56,6 @@ public class KeyGenerator {
             keyCombined = permutationPC2(keyCombined);
             keysCombined[i] = keyCombined;
         }
-        System.out.println(Arrays.toString(keysCombined));
     }
 
     public static String getKey() {

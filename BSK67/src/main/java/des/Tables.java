@@ -1,4 +1,4 @@
-package sample;
+package des;
 
 public class Tables {
     private static int[] ip = {
