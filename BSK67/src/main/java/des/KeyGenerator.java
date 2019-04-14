@@ -26,32 +26,33 @@ public class KeyGenerator {
         key = sb.toString();
     }
 
-    public static void permutationPC1(){
+    public static void permutationPC1() {
         StringBuilder sb = new StringBuilder();
         int pc1[] = Tables.getPc1();
-        for(int i = 0; i<pc1.length; i++){
-            sb.append(key.charAt(pc1[i]-1));
+        for (int i = 0; i < pc1.length; i++) {
+            sb.append(key.charAt(pc1[i] - 1));
         }
         key = sb.toString();
     }
 
-    public static String permutationPC2(String keyPC){
+    public static String permutationPC2(String keyPC) {
         StringBuilder sb = new StringBuilder();
         int pc2[] = Tables.getPc2();
-        for(int i = 0; i<pc2.length; i++){
-            sb.append(keyPC.charAt(pc2[i]-1));
+        for (int i = 0; i < pc2.length; i++) {
+            sb.append(keyPC.charAt(pc2[i] - 1));
         }
         return sb.toString();
     }
 
-    public static void generateKeys(){
+    public static void generateKeys() {
         keysCombined = new String[16];
-        String leftKey = key.substring(0,28);
-        String rightKey = key.substring(28,56);String keyCombined;
+        String leftKey = key.substring(0, 28);
+        String rightKey = key.substring(28, 56);
+        String keyCombined;
         int[] leftShiftOrder = Tables.getLeftShiftOrder();
-        for(int i = 0; i<16; i++){
-            leftKey = leftKey.substring(leftShiftOrder[i],28) + leftKey.substring(0,leftShiftOrder[i]);
-            rightKey = rightKey.substring(leftShiftOrder[i],28) + rightKey.substring(0,leftShiftOrder[i]);
+        for (int i = 0; i < 16; i++) {
+            leftKey = leftKey.substring(leftShiftOrder[i], 28) + leftKey.substring(0, leftShiftOrder[i]);
+            rightKey = rightKey.substring(leftShiftOrder[i], 28) + rightKey.substring(0, leftShiftOrder[i]);
             keyCombined = leftKey + rightKey;
             keyCombined = permutationPC2(keyCombined);
             keysCombined[i] = keyCombined;

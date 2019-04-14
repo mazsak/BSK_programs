@@ -15,37 +15,38 @@ public class Encoding {
     private static ArrayList<String> permutedMessageBlocks;
     private static HashMap<String, String> hexMap = new HashMap<>();
 
-    public static String sixToFour(String afterXOR){
+    public static String sixToFour(String afterXOR) {
         StringBuilder sb = new StringBuilder();
         ArrayList<int[][]> listSboxes = Tables.getSBoxes();
         for (int i = 0; i < 8; i++) {
-            int row = Character.getNumericValue(afterXOR.charAt(6 * i)) + Character.getNumericValue(afterXOR.charAt((6 * i) + 5));
-            int column = Character.getNumericValue(afterXOR.charAt((6 * i) + 1)) + Character.getNumericValue(afterXOR.charAt((6 * i) + 2)) + Character.getNumericValue(afterXOR.charAt((6 * i) + 3)) + Character.getNumericValue(afterXOR.charAt((6 * i) + 4));
-           // StringBuilder sb = new StringBuilder();
+            StringBuilder sbTemp = new StringBuilder();
+            sbTemp.append(Character.getNumericValue(afterXOR.charAt(6 * i))).append(Character.getNumericValue(afterXOR.charAt((6 * i) + 5)));
+            int row = Integer.parseInt(sbTemp.toString(), 2);
+            sbTemp = new StringBuilder();
+            sbTemp.append(Character.getNumericValue(afterXOR.charAt((6 * i) + 1))).append(Character.getNumericValue(afterXOR.charAt((6 * i) + 2))).append(Character.getNumericValue(afterXOR.charAt((6 * i) + 3))).append(Character.getNumericValue(afterXOR.charAt((6 * i) + 4)));
+            int column = Integer.parseInt(sbTemp.toString(), 2);
             sb.append(hexMap.get(Integer.toString(listSboxes.get(i)[row][column])));
-            //stringBuilder.append(sb.toString());
         }
         return sb.toString();
     }
 
-    public static void encrypt(){
+    public static void encrypt() {
         String[] keys = KeyGenerator.getKeysCombined();
 
-        for(int i = 0; i < permutedMessageBlocks.size(); i++) {
+        for (int i = 0; i < permutedMessageBlocks.size(); i++) {
             String leftMessage = permutedMessageBlocks.get(i).substring(0, 32);
             String rightMessage = permutedMessageBlocks.get(i).substring(32, 64);
-            for(int j = 0; j < 1; j++){
+            for (int j = 0; j < 1; j++) {
                 String tmpRightMessage = rightMessage;
                 rightMessage = permutationE(rightMessage);
-                rightMessage = XOR.calculate(keys[0],rightMessage);
-
+                rightMessage = XOR.calculate(keys[0], rightMessage);
                 rightMessage = sixToFour(rightMessage);
 
-               // rightMessage = XOR.calculate(leftMessage,rightMessage);
+                // rightMessage = XOR.calculate(leftMessage,rightMessage);
                 leftMessage = tmpRightMessage;
             }
-            System.out.println(leftMessage);
-            System.out.println("XOR " +rightMessage);
+            //System.out.println(leftMessage);
+            System.out.println(rightMessage);
             System.out.println(permutedMessageBlocks.size());
         }
     }
@@ -99,17 +100,17 @@ public class Encoding {
     }
 
     //wersja dla plikow binarnych
-    public static void divideToBlocks(){
+    public static void divideToBlocks() {
         setMap();
         String tmpMessage = message;
-        while(tmpMessage.length()>15){
+        while (tmpMessage.length() > 15) {
             int block[] = new int[64];
-            for(int i = 0; i<16; i++){
+            for (int i = 0; i < 16; i++) {
                 String hexValue = String.valueOf(tmpMessage.charAt(i));
-                block[4*i] = Character.getNumericValue(hexMap.get(hexValue).charAt(0));
-                block[(4*i)+1] = Character.getNumericValue(hexMap.get(hexValue).charAt(1));
-                block[(4*i)+2] = Character.getNumericValue(hexMap.get(hexValue).charAt(2));
-                block[(4*i)+3] = Character.getNumericValue(hexMap.get(hexValue).charAt(3));
+                block[4 * i] = Character.getNumericValue(hexMap.get(hexValue).charAt(0));
+                block[(4 * i) + 1] = Character.getNumericValue(hexMap.get(hexValue).charAt(1));
+                block[(4 * i) + 2] = Character.getNumericValue(hexMap.get(hexValue).charAt(2));
+                block[(4 * i) + 3] = Character.getNumericValue(hexMap.get(hexValue).charAt(3));
             }
             messageBlocks.add(Arrays.toString(block).replaceAll("\\[|\\]|,|\\s", ""));
             tmpMessage = tmpMessage.substring(16);
@@ -117,13 +118,13 @@ public class Encoding {
     }
 
     //wersja dla plikow tekstowych
-    public static void divideToBlocksTxt(){
+    public static void divideToBlocksTxt() {
         setMap();
         String tmpMessage = message;
         System.out.println(tmpMessage.length());
-        while(tmpMessage.length()>63){
+        while (tmpMessage.length() > 63) {
             StringBuilder sb = new StringBuilder();
-            for(int i = 0; i<64; i++){
+            for (int i = 0; i < 64; i++) {
                 sb.append(tmpMessage.charAt(i));
             }
             messageBlocks.add(sb.toString());
@@ -131,29 +132,30 @@ public class Encoding {
         }
     }
 
-    public static void permutationIP(){
+    public static void permutationIP() {
         permutedMessageBlocks = new ArrayList();
         int ip[] = Tables.getIp();
-        for(String block : messageBlocks){
+        for (String block : messageBlocks) {
             StringBuilder sb = new StringBuilder();
-            for(int i = 0; i<ip.length; i++){
-                sb.append(block.charAt(ip[i]-1));
+            for (int i = 0; i < ip.length; i++) {
+                sb.append(block.charAt(ip[i] - 1));
             }
             permutedMessageBlocks.add(sb.toString());
             //System.out.println(block);
             //System.out.println(sb.toString());
         }
     }
-    public static String permutationE(String messageRight){
+
+    public static String permutationE(String messageRight) {
         StringBuilder sb = new StringBuilder();
         int e[] = Tables.geteTable();
-        for(int i = 0; i<e.length; i++){
-            sb.append(messageRight.charAt(e[i]-1));
+        for (int i = 0; i < e.length; i++) {
+            sb.append(messageRight.charAt(e[i] - 1));
         }
         return sb.toString();
     }
 
-    private static void setMap(){
+    private static void setMap() {
         hexMap.put("0", "0000");
         hexMap.put("1", "0001");
         hexMap.put("2", "0010");
@@ -170,7 +172,13 @@ public class Encoding {
         hexMap.put("d", "1101");
         hexMap.put("e", "1110");
         hexMap.put("f", "1111");
-    }
+        hexMap.put("10", "1010");
+        hexMap.put("11", "1011");
+        hexMap.put("12", "1100");
+        hexMap.put("13", "1101");
+        hexMap.put("14", "1110");
+        hexMap.put("15", "1111");
 
+    }
 }
 
