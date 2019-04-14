@@ -4,7 +4,7 @@ public class XOR {
 
     public static String calculate(String key, String part) {
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i<48; i++){
+        for(int i = 0; i<key.length(); i++){
             if(key.charAt(i)==part.charAt(i)){
                 sb.append(0);
             }else{

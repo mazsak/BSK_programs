@@ -34,6 +34,13 @@ public class Tables {
             34, 53, 46, 42, 50, 36, 29, 32
     };
 
+    public static int[] pTable = {
+            16, 7, 20, 21, 29, 12, 28, 17,
+            1, 15, 23, 26, 5, 18, 31, 10,
+            2, 8, 24, 14, 32, 27, 3, 9,
+            19, 13, 30, 6, 22, 11, 4, 25
+    };
+
     public static int[] eTable = {
             32, 1, 2, 3, 4, 5,
             4, 5, 6, 7, 8, 9,
@@ -95,6 +102,10 @@ public class Tables {
             {2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}};
 
     public static int[] leftShiftOrder = {1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
+
+    public static int[] getpTable() {
+        return pTable;
+    }
 
     public static int[] geteTable() {
         return eTable;
