@@ -1,5 +1,7 @@
 package des;
 
+import javafx.scene.control.Tab;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,6 +14,41 @@ public class Encoding {
     private static ArrayList<String> messageBlocks;
     private static ArrayList<String> permutedMessageBlocks;
     private static HashMap<String, String> hexMap = new HashMap<>();
+
+    public static String sixToFour(String afterXOR){
+        StringBuilder sb = new StringBuilder();
+        ArrayList<int[][]> listSboxes = Tables.getSBoxes();
+        for (int i = 0; i < 8; i++) {
+            int row = Character.getNumericValue(afterXOR.charAt(6 * i)) + Character.getNumericValue(afterXOR.charAt((6 * i) + 5));
+            int column = Character.getNumericValue(afterXOR.charAt((6 * i) + 1)) + Character.getNumericValue(afterXOR.charAt((6 * i) + 2)) + Character.getNumericValue(afterXOR.charAt((6 * i) + 3)) + Character.getNumericValue(afterXOR.charAt((6 * i) + 4));
+           // StringBuilder sb = new StringBuilder();
+            sb.append(hexMap.get(Integer.toString(listSboxes.get(i)[row][column])));
+            //stringBuilder.append(sb.toString());
+        }
+        return sb.toString();
+    }
+
+    public static void encrypt(){
+        String[] keys = KeyGenerator.getKeysCombined();
+
+        for(int i = 0; i < permutedMessageBlocks.size(); i++) {
+            String leftMessage = permutedMessageBlocks.get(i).substring(0, 32);
+            String rightMessage = permutedMessageBlocks.get(i).substring(32, 64);
+            for(int j = 0; j < 1; j++){
+                String tmpRightMessage = rightMessage;
+                rightMessage = permutationE(rightMessage);
+                rightMessage = XOR.calculate(keys[0],rightMessage);
+
+                rightMessage = sixToFour(rightMessage);
+
+               // rightMessage = XOR.calculate(leftMessage,rightMessage);
+                leftMessage = tmpRightMessage;
+            }
+            System.out.println(leftMessage);
+            System.out.println("XOR " +rightMessage);
+            System.out.println(permutedMessageBlocks.size());
+        }
+    }
 
     //wersja dla plikow binarnych
     public static void loadMessage() {
@@ -106,6 +143,14 @@ public class Encoding {
             //System.out.println(block);
             //System.out.println(sb.toString());
         }
+    }
+    public static String permutationE(String messageRight){
+        StringBuilder sb = new StringBuilder();
+        int e[] = Tables.geteTable();
+        for(int i = 0; i<e.length; i++){
+            sb.append(messageRight.charAt(e[i]-1));
+        }
+        return sb.toString();
     }
 
     private static void setMap(){

@@ -21,9 +21,12 @@ public class Main extends Application {
         KeyGenerator.loadKey();
         KeyGenerator.permutationPC1();
         KeyGenerator.generateKeys();
-        Encoding.loadMessage();
-        Encoding.divideToBlocks();
+//        Encoding.loadMessage();
+//        Encoding.divideToBlocks();
+        Encoding.loadMessageTxt();
+        Encoding.divideToBlocksTxt();
         Encoding.permutationIP();
+        Encoding.encrypt();
 
         launch(args);
     }
