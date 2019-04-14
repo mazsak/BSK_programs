@@ -1,12 +1,10 @@
-package sample;
+package des;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.FileNotFoundException;
 
 public class Main extends Application {
 
@@ -20,13 +18,11 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        try {
-            KeyGenerator.loadKey();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        KeyGenerator.loadKey();
         KeyGenerator.permutationPC1();
-        KeyGenerator.divide();
+        KeyGenerator.generateKeys();
+        Encoding.loadMessage();
+        Encoding.permutationIP();
 
         launch(args);
     }

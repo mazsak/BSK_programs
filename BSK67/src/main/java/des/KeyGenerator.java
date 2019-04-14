@@ -1,16 +1,16 @@
 package sample;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class KeyGenerator {
     private static String key;
     private static String[] keysCombined;
 
-    public static void loadKey() throws FileNotFoundException {
+    public static void loadKey() {
         StringBuilder sb = new StringBuilder();
         try (Reader reader = Files.newBufferedReader(Paths.get("key.txt"))) {
             int c;
@@ -45,7 +45,8 @@ public class KeyGenerator {
         return sb.toString();
     }
 
-    public static void divide(){
+    public static void generateKeys(){
+        keysCombined = new String[16];
         String leftKey = key.substring(0,28);
         String rightKey = key.substring(28,56);String keyCombined;
         int[] leftShiftOrder = Tables.getLeftShiftOrder();
@@ -54,8 +55,9 @@ public class KeyGenerator {
             rightKey = rightKey.substring(leftShiftOrder[i],28) + rightKey.substring(0,leftShiftOrder[i]);
             keyCombined = leftKey + rightKey;
             keyCombined = permutationPC2(keyCombined);
-            System.out.println(keyCombined);
+            keysCombined[i] = keyCombined;
         }
+        System.out.println(Arrays.toString(keysCombined));
     }
 
     public static String getKey() {
