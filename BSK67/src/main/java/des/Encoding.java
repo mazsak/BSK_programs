@@ -33,6 +33,7 @@ public class Encoding {
     public static void encrypt() {
         String[] keys = KeyGenerator.getKeysCombined();
 
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < permutedMessageBlocks.size(); i++) {
             String leftMessage = permutedMessageBlocks.get(i).substring(0, 32);
             String rightMessage = permutedMessageBlocks.get(i).substring(32, 64);
@@ -40,6 +41,49 @@ public class Encoding {
                 String tmpRightMessage = rightMessage;
                 rightMessage = permutation(rightMessage,Tables.geteTable());
                 rightMessage = XOR.calculate(keys[j], rightMessage);
+                rightMessage = sixToFour(rightMessage);
+                rightMessage = permutation(rightMessage,Tables.getpTable());
+
+                rightMessage = XOR.calculate(leftMessage,rightMessage);
+                leftMessage = tmpRightMessage;
+            }
+            System.out.println(leftMessage);
+            System.out.println(rightMessage);
+            System.out.println();
+            rightMessage = permutation(rightMessage + leftMessage, Tables.getIpInverse());
+            System.out.println(rightMessage);
+
+            System.out.println(permutedMessageBlocks.size());
+            result.append(rightMessage);
+        }
+       // saveEncodedTxt(result.toString());
+    }
+
+    //wersja dla plikow tekstowych
+    public static void saveEncodedTxt(String result) {
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter("encoded.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PrintWriter printWriter = new PrintWriter(fileWriter);
+        printWriter.print(result);
+        printWriter.close();
+    }
+
+    public static void decrypt() {
+        String[] keys = KeyGenerator.getKeysCombined();
+
+        for (int i = 0; i < permutedMessageBlocks.size(); i++) {
+            String leftMessage = permutedMessageBlocks.get(i).substring(0, 32);
+            String rightMessage = permutedMessageBlocks.get(i).substring(32, 64);
+            int z = 15;
+            for (int j = 0; j < 16; j++) {
+                String tmpRightMessage = rightMessage;
+                rightMessage = permutation(rightMessage,Tables.geteTable());
+                rightMessage = XOR.calculate(keys[z], rightMessage);
+                z--;
                 rightMessage = sixToFour(rightMessage);
                 rightMessage = permutation(rightMessage,Tables.getpTable());
 

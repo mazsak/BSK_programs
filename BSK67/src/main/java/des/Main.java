@@ -29,7 +29,7 @@ public class Main extends Application {
         Encoding.divideToBlocksTxt();
         Encoding.permutationIP();
         Encoding.encrypt();
-
+       // Encoding.decrypt();
         launch(args);
     }
 }
