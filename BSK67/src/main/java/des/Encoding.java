@@ -36,17 +36,20 @@ public class Encoding {
         for (int i = 0; i < permutedMessageBlocks.size(); i++) {
             String leftMessage = permutedMessageBlocks.get(i).substring(0, 32);
             String rightMessage = permutedMessageBlocks.get(i).substring(32, 64);
-            for (int j = 0; j < 1; j++) {
+            for (int j = 0; j < 16; j++) {
                 String tmpRightMessage = rightMessage;
-                rightMessage = permutationEorP(rightMessage,Tables.geteTable());
-                rightMessage = XOR.calculate(keys[0], rightMessage);
+                rightMessage = permutation(rightMessage,Tables.geteTable());
+                rightMessage = XOR.calculate(keys[i], rightMessage);
                 rightMessage = sixToFour(rightMessage);
-                rightMessage = permutationEorP(rightMessage,Tables.getpTable());
+                rightMessage = permutation(rightMessage,Tables.getpTable());
 
                 rightMessage = XOR.calculate(leftMessage,rightMessage);
                 leftMessage = tmpRightMessage;
             }
-            //System.out.println(leftMessage);
+            System.out.println(leftMessage);
+            System.out.println(rightMessage);
+            System.out.println();
+            rightMessage = permutation(rightMessage + leftMessage, Tables.getIpInverse());
             System.out.println(rightMessage);
             System.out.println(permutedMessageBlocks.size());
         }
@@ -147,7 +150,7 @@ public class Encoding {
         }
     }
 
-    public static String permutationEorP(String messageRight, int table[]) {
+    public static String permutation(String messageRight, int table[]) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < table.length; i++) {
             sb.append(messageRight.charAt(table[i] - 1));
