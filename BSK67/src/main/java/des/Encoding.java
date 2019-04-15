@@ -1,24 +1,18 @@
 package des;
 
-import javafx.scene.control.Tab;
-
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Encoding {
-    private static String message;
-    private static ArrayList<String> messageBlocks;
     private static ArrayList<String> permutedMessageBlocks;
     private static HashMap<String, String> hexMap = new HashMap<>();
 
     public static String sixToFour(String afterXOR) {
         StringBuilder sb = new StringBuilder();
         ArrayList<int[][]> listSboxes = Tables.getSBoxes();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < listSboxes.size(); i++) {
             StringBuilder sbTemp = new StringBuilder();
             sbTemp.append(Character.getNumericValue(afterXOR.charAt(6 * i))).append(Character.getNumericValue(afterXOR.charAt((6 * i) + 5)));
             int row = Integer.parseInt(sbTemp.toString(), 2);
@@ -30,94 +24,82 @@ public class Encoding {
         return sb.toString();
     }
 
-    public static void encrypt() {
+    public static String coding(boolean encrypt) {
         String[] keys = KeyGenerator.getKeysCombined();
-
         StringBuilder result = new StringBuilder();
+        int z = 0, helpCounter = 1;
+
+        if (encrypt) {
+            z = 15;
+            helpCounter = -1;
+        }
+
         for (int i = 0; i < permutedMessageBlocks.size(); i++) {
             String leftMessage = permutedMessageBlocks.get(i).substring(0, 32);
             String rightMessage = permutedMessageBlocks.get(i).substring(32, 64);
+            int counter = z;
             for (int j = 0; j < 16; j++) {
                 String tmpRightMessage = rightMessage;
                 rightMessage = permutation(rightMessage,Tables.geteTable());
-                rightMessage = XOR.calculate(keys[j], rightMessage);
+                rightMessage = XOR.calculate(keys[counter], rightMessage);
+                counter += helpCounter;
                 rightMessage = sixToFour(rightMessage);
                 rightMessage = permutation(rightMessage,Tables.getpTable());
 
                 rightMessage = XOR.calculate(leftMessage,rightMessage);
                 leftMessage = tmpRightMessage;
             }
-            System.out.println(leftMessage);
-            System.out.println(rightMessage);
-            System.out.println();
-            rightMessage = permutation(rightMessage + leftMessage, Tables.getIpInverse());
-            System.out.println(rightMessage);
 
-            System.out.println(permutedMessageBlocks.size());
+            rightMessage = permutation(rightMessage + leftMessage, Tables.getIpInverse());
+
             result.append(rightMessage);
         }
-       // saveEncodedTxt(result.toString());
+
+        return result.toString();
     }
 
-    //wersja dla plikow tekstowych
-    public static void saveEncodedTxt(String result) {
-        FileWriter fileWriter = null;
+    public static void saveEncoded(String result, String name) {
         try {
-            fileWriter = new FileWriter("encoded.txt");
+            OutputStream outputStream = new FileOutputStream(new File(name + ".bin"));
+            List<Integer> bytes = divideString(result);
+            for (int data : bytes) {
+                outputStream.write(data);
+            }
+
+            outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.print(result);
-        printWriter.close();
     }
 
-    public static void decrypt() {
-        String[] keys = KeyGenerator.getKeysCombined();
+    public static List<Integer> divideString(String word) {
+        List<Integer> list = new ArrayList<>();
 
-        for (int i = 0; i < permutedMessageBlocks.size(); i++) {
-            String leftMessage = permutedMessageBlocks.get(i).substring(0, 32);
-            String rightMessage = permutedMessageBlocks.get(i).substring(32, 64);
-            int z = 15;
-            for (int j = 0; j < 16; j++) {
-                String tmpRightMessage = rightMessage;
-                rightMessage = permutation(rightMessage,Tables.geteTable());
-                rightMessage = XOR.calculate(keys[z], rightMessage);
-                z--;
-                rightMessage = sixToFour(rightMessage);
-                rightMessage = permutation(rightMessage,Tables.getpTable());
-
-                rightMessage = XOR.calculate(leftMessage,rightMessage);
-                leftMessage = tmpRightMessage;
-            }
-            System.out.println(leftMessage);
-            System.out.println(rightMessage);
-            System.out.println();
-            rightMessage = permutation(rightMessage + leftMessage, Tables.getIpInverse());
-            System.out.println(rightMessage);
-            System.out.println(permutedMessageBlocks.size());
+        for (int i = 0; i < word.length(); i += 8) {
+            list.add(Integer.parseInt(word.substring(i, Math.min(word.length(), i + 8)), 2));
         }
+
+        return list;
     }
 
     //wersja dla plikow binarnych
-    public static void loadMessage() {
+    public static List<String> loadMessage(String name) {
+        setMap();
         StringBuilder sb = new StringBuilder();
-        messageBlocks = new ArrayList();
         try {
-            InputStream inputStream = new FileInputStream("test4.bin");
+            InputStream inputStream = new FileInputStream(name + ".bin");
 
             int data = inputStream.read();
 
             while (data != -1) {
                 if (data == 0) {
-                    sb.append("00");
+                    sb.append("00000000");
                 } else {
-                    String dataString = Integer.toString(data, 16);
-                    if (dataString.length() == 1) {
-                        sb.append("0" + dataString);
-                    } else {
-                        sb.append(dataString);
+                    String dataString = Integer.toString(data, 2);
+                    while (dataString.length() < 8) {
+                        dataString = "0" + dataString;
                     }
+                    sb.append(dataString);
                 }
                 data = inputStream.read();
             }
@@ -125,49 +107,12 @@ public class Encoding {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        message = sb.toString();
+        return divideToBlocks(sb.toString());
     }
 
     //wersja dla plikow tekstowych
-    public static void loadMessageTxt() {
-        StringBuilder sb = new StringBuilder();
-        messageBlocks = new ArrayList();
-        try (Reader reader = Files.newBufferedReader(Paths.get("xd.txt"))) {
-            int c;
-            while ((c = reader.read()) != -1) {
-                char ch = (char) c;
-                int value = Character.getNumericValue(ch);
-                if (value >= 0) {
-                    sb.append(value);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        message = sb.toString();
-    }
-
-    //wersja dla plikow binarnych
-    public static void divideToBlocks() {
-        setMap();
-        String tmpMessage = message;
-        while (tmpMessage.length() > 15) {
-            int block[] = new int[64];
-            for (int i = 0; i < 16; i++) {
-                String hexValue = String.valueOf(tmpMessage.charAt(i));
-                block[4 * i] = Character.getNumericValue(hexMap.get(hexValue).charAt(0));
-                block[(4 * i) + 1] = Character.getNumericValue(hexMap.get(hexValue).charAt(1));
-                block[(4 * i) + 2] = Character.getNumericValue(hexMap.get(hexValue).charAt(2));
-                block[(4 * i) + 3] = Character.getNumericValue(hexMap.get(hexValue).charAt(3));
-            }
-            messageBlocks.add(Arrays.toString(block).replaceAll("\\[|\\]|,|\\s", ""));
-            tmpMessage = tmpMessage.substring(16);
-        }
-    }
-
-    //wersja dla plikow tekstowych
-    public static void divideToBlocksTxt() {
-        setMap();
+    public static List<String> divideToBlocks(String message) {
+        List<String> messageBlocks = new ArrayList<>();
         String tmpMessage = message;
         System.out.println(tmpMessage.length());
         while (tmpMessage.length() > 63) {
@@ -178,9 +123,11 @@ public class Encoding {
             messageBlocks.add(sb.toString());
             tmpMessage = tmpMessage.substring(64);
         }
+
+        return messageBlocks;
     }
 
-    public static void permutationIP() {
+    public static void permutationIP(List<String> messageBlocks) {
         permutedMessageBlocks = new ArrayList();
         int ip[] = Tables.getIp();
         for (String block : messageBlocks) {
@@ -189,8 +136,6 @@ public class Encoding {
                 sb.append(block.charAt(ip[i] - 1));
             }
             permutedMessageBlocks.add(sb.toString());
-            //System.out.println(block);
-            //System.out.println(sb.toString());
         }
     }
 

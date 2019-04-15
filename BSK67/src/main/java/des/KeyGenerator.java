@@ -62,8 +62,4 @@ public class KeyGenerator {
     public static String[] getKeysCombined() {
         return keysCombined;
     }
-
-    public static String getKey() {
-        return key;
-    }
 }
