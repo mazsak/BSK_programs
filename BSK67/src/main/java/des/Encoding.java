@@ -39,7 +39,7 @@ public class Encoding {
             for (int j = 0; j < 16; j++) {
                 String tmpRightMessage = rightMessage;
                 rightMessage = permutation(rightMessage,Tables.geteTable());
-                rightMessage = XOR.calculate(keys[i], rightMessage);
+                rightMessage = XOR.calculate(keys[j], rightMessage);
                 rightMessage = sixToFour(rightMessage);
                 rightMessage = permutation(rightMessage,Tables.getpTable());
 
